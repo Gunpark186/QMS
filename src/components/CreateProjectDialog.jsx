@@ -3,17 +3,13 @@ import {
   Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Grid, MenuItem
 } from '@mui/material';
 
-const countryList = ['USA', 'UK', 'India', 'Germany', 'France', 'Other'];
 const roomTypeOptions = ['King', 'Queen', 'Twin', 'Suite', 'Single', 'Double'];
 
 const initialForm = {
   projectName: '',
   crmOpportunityNumber: '',
   crmProjectNumber: '',
-  numberOfRooms: '',
-  numberOfRoomTypes: '',
-  roomTypes: [],
-  country: ''
+  roomTypes: []
 };
 
 export default function CreateProjectDialog({ open, onClose, onCreate }) {
@@ -61,7 +57,15 @@ export default function CreateProjectDialog({ open, onClose, onCreate }) {
       <DialogContent>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <TextField label="Enter the project name" name="projectName" value={form.projectName} onChange={handleChange} fullWidth required />
+            <TextField 
+              label="Project Name" 
+              name="projectName" 
+              value={form.projectName} 
+              onChange={handleChange} 
+              fullWidth 
+              required 
+              inputProps={{ maxLength: 100 }}
+            />
           </Grid>
           <Grid item xs={12}>
             <TextField label="CRM Opportunity number" name="crmOpportunityNumber" value={form.crmOpportunityNumber} onChange={handleChange} fullWidth />
@@ -69,15 +73,7 @@ export default function CreateProjectDialog({ open, onClose, onCreate }) {
           <Grid item xs={12}>
             <TextField label="CRM project number" name="crmProjectNumber" value={form.crmProjectNumber} onChange={handleChange} fullWidth />
           </Grid>
-          <Grid item xs={12}>
-            <TextField label="Number of rooms" name="numberOfRooms" value={form.numberOfRooms} onChange={handleChange} fullWidth />
-          </Grid>
-          <Grid item xs={8}>
-            <TextField label="Number of room types" name="numberOfRoomTypes" value={form.numberOfRoomTypes} onChange={handleChange} fullWidth />
-          </Grid>
-          <Grid item xs={4} style={{ display: 'flex', alignItems: 'center' }}>
-            <Button variant="outlined" onClick={handleAddRoomTypes} fullWidth>Add</Button>
-          </Grid>
+          {/* Removed number of rooms, number of room types, and country fields */}
           {showRoomTypes && form.roomTypes.map((rt, idx) => (
             <React.Fragment key={idx}>
               <Grid item xs={6}>
@@ -101,13 +97,6 @@ export default function CreateProjectDialog({ open, onClose, onCreate }) {
               </Grid>
             </React.Fragment>
           ))}
-          <Grid item xs={12}>
-            <TextField select label="Country" name="country" value={form.country} onChange={handleChange} fullWidth>
-              {countryList.map((c) => (
-                <MenuItem key={c} value={c}>{c}</MenuItem>
-              ))}
-            </TextField>
-          </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>

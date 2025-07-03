@@ -17,7 +17,7 @@ export default function SummaryStatCard({ label, value, color, icon }) {
   const textColor = '#fff';
   return (
     <Card sx={{
-      borderRadius: 4,
+      borderRadius: 1,
       boxShadow: 8,
       minWidth: 240,
       minHeight: 140,

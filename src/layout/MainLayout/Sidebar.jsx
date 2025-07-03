@@ -23,14 +23,15 @@ export default function Sidebar({ collapsed, setCollapsed }) {
     <Box
       ref={sidebarRef}
       sx={{
-        width: collapsed ? 72 : 220,
+        width: collapsed ? 72 : 140, // further reduced width when expanded
         transition: 'width 0.2s',
         background: '#fff',
-        height: '100vh',
-        borderRight: '1px solid #eee',
+        height: 'calc(100vh - 64px)', // only below header
+        marginTop: '64px', // push below header
         position: 'fixed',
         zIndex: 1200,
-        mt: '64px'
+        left: 0,
+        top: 0 // start at top, but margin pushes it down
       }}
     >
       <List sx={{ pt: 2 }}>
@@ -46,13 +47,17 @@ export default function Sidebar({ collapsed, setCollapsed }) {
               sx={{
                 justifyContent: collapsed ? 'center' : 'flex-start',
                 px: collapsed ? 0 : 2,
-                mb: 1
+                mb: 1,
+                cursor: 'pointer',
+                backgroundColor: location.pathname === item.url ? 'rgba(33, 150, 243, 0.12)' : 'transparent',
+                borderRadius: 2,
+                transition: 'background-color 0.2s'
               }}
             >
               <ListItemIcon sx={{ minWidth: 0, color: location.pathname === item.url ? 'primary.main' : 'inherit' }}>
                 {item.icon && React.createElement(item.icon.type || item.icon, { size: 28 })}
               </ListItemIcon>
-              {!collapsed && <ListItemText primary={item.title} sx={{ ml: 2 }} />}
+              {!collapsed && <ListItemText primary={item.title} sx={{ ml: 2, cursor: 'pointer' }} />}
             </ListItem>
           </Tooltip>
         ))}

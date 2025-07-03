@@ -55,17 +55,17 @@ export default function ProjectInfoForm({ setProjectId, setProjectType, onNext, 
   const validate = () => {
     const newErrors = {};
     if (tab === 0) {
+      if (!form.project_name.trim()) newErrors.project_name = 'Required';
+      if (!form.crm_opportunity_number.trim()) newErrors.crm_opportunity_number = 'Required';
+      if (!form.crm_project_number.trim()) newErrors.crm_project_number = 'Required';
+      if (!form.system_required) newErrors.system_required = 'Required';
+    } else {
       if (!form.customer_name.trim()) newErrors.customer_name = 'Required';
       if (!form.consultant_name.trim()) newErrors.consultant_name = 'Required';
       if (!form.mep_contractor_name.trim()) newErrors.mep_contractor_name = 'Required';
       if (!form.operator_name.trim()) newErrors.operator_name = 'Required';
       if (!form.salesperson_name.trim()) newErrors.salesperson_name = 'Required';
       if (!form.ctl_name.trim()) newErrors.ctl_name = 'Required';
-    } else {
-      if (!form.project_name.trim()) newErrors.project_name = 'Required';
-      if (!form.crm_opportunity_number.trim()) newErrors.crm_opportunity_number = 'Required';
-      if (!form.crm_project_number.trim()) newErrors.crm_project_number = 'Required';
-      if (!form.system_required) newErrors.system_required = 'Required';
     }
     return newErrors;
   };
@@ -95,7 +95,7 @@ export default function ProjectInfoForm({ setProjectId, setProjectType, onNext, 
   };
 
   return (
-    <Paper elevation={2} sx={{ p: 4, maxWidth: 800, mx: 'auto' }}>
+    <Paper elevation={2} sx={{ p: 4, maxWidth: '1000px', mx: 'auto', boxShadow: 'none', border: 'none'}}>
       <Typography variant="h5" mb={3}>
         Project Info
       </Typography>
@@ -104,6 +104,65 @@ export default function ProjectInfoForm({ setProjectId, setProjectType, onNext, 
         <Tab label="Project Information" />
       </Tabs>
       {tab === 0 && (
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Project Name"
+              name="project_name"
+              value={form.project_name}
+              onChange={handleChange}
+              error={Boolean(errors.project_name)}
+              helperText={errors.project_name}
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="CRM Opportunity Number"
+              name="crm_opportunity_number"
+              value={form.crm_opportunity_number}
+              onChange={handleChange}
+              error={Boolean(errors.crm_opportunity_number)}
+              helperText={errors.crm_opportunity_number}
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="CRM Project Number"
+              name="crm_project_number"
+              value={form.crm_project_number}
+              onChange={handleChange}
+              error={Boolean(errors.crm_project_number)}
+              helperText={errors.crm_project_number}
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              select
+              fullWidth
+              label="System Required"
+              name="system_required"
+              value={form.system_required}
+              onChange={handleChange}
+              error={Boolean(errors.system_required)}
+              helperText={errors.system_required}
+              variant="outlined"
+            >
+              {systemRequiredOptions.map((opt) => (
+                <MenuItem key={opt} value={opt}>
+                  {opt}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+        </Grid>
+      )}
+      {tab === 1 && (
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -176,65 +235,6 @@ export default function ProjectInfoForm({ setProjectId, setProjectType, onNext, 
               helperText={errors.ctl_name}
               variant="outlined"
             />
-          </Grid>
-        </Grid>
-      )}
-      {tab === 1 && (
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Project Name"
-              name="project_name"
-              value={form.project_name}
-              onChange={handleChange}
-              error={Boolean(errors.project_name)}
-              helperText={errors.project_name}
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="CRM Opportunity Number"
-              name="crm_opportunity_number"
-              value={form.crm_opportunity_number}
-              onChange={handleChange}
-              error={Boolean(errors.crm_opportunity_number)}
-              helperText={errors.crm_opportunity_number}
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="CRM Project Number"
-              name="crm_project_number"
-              value={form.crm_project_number}
-              onChange={handleChange}
-              error={Boolean(errors.crm_project_number)}
-              helperText={errors.crm_project_number}
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              select
-              fullWidth
-              label="System Required"
-              name="system_required"
-              value={form.system_required}
-              onChange={handleChange}
-              error={Boolean(errors.system_required)}
-              helperText={errors.system_required}
-              variant="outlined"
-            >
-              {systemRequiredOptions.map((opt) => (
-                <MenuItem key={opt} value={opt}>
-                  {opt}
-                </MenuItem>
-              ))}
-            </TextField>
           </Grid>
         </Grid>
       )}

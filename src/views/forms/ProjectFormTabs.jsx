@@ -40,7 +40,7 @@ export default function ProjectFormsTabs() {
   };
 
   const goToNextTab = () => {
-    if (tab < 9) {
+    if (tab < 11) {
       setTab(tab + 1); 
     }
   };
@@ -71,7 +71,7 @@ export default function ProjectFormsTabs() {
       elevation={3}
       sx={{
         display: 'flex',
-        height: 'calc(100vh - 64px)', // Adjust based on your app bar height
+        height: 'calc(100vh - 0px + 100px)', // Increase height further to ensure all tabs are visible
         p: 2,
         overflow: 'hidden'
       }}
@@ -81,7 +81,13 @@ export default function ProjectFormsTabs() {
         orientation="vertical"
         value={tab}
         onChange={handleTabChange}
-        sx={{ borderRight: 1, borderColor: 'divider', minWidth: 140, width: 140 }}
+        sx={{ borderRight: 1, borderColor: 'divider', minWidth: 140, width: 140,
+          '& .MuiTab-root.Mui-selected': {
+            backgroundColor: 'rgba(33, 150, 243, 0.12)',
+            borderRadius: 2,
+            transition: 'background-color 0.2s',
+          }
+        }}
       >
         <Tab label="Project Info" />
         <Tab label="Room Types" />
@@ -92,6 +98,8 @@ export default function ProjectFormsTabs() {
         <Tab label="Sensors & Contacts" />
         <Tab label="Door Lock Integration" />
         <Tab label="Integration" />
+        <Tab label="Bus Line Configuration" />
+        <Tab label="Block Arrangements" />
         <Tab label="Downloads" />
       </Tabs>
 
@@ -163,6 +171,16 @@ export default function ProjectFormsTabs() {
           />
         </TabPanel>
         <TabPanel value={tab} index={9}>
+          <Box sx={{ p: 4, textAlign: 'center' }}>
+            <Typography variant="h6" color="text.secondary">In Progress</Typography>
+          </Box>
+        </TabPanel>
+        <TabPanel value={tab} index={10}>
+          <Box sx={{ p: 4, textAlign: 'center' }}>
+            <Typography variant="h6" color="text.secondary">In Progress</Typography>
+          </Box>
+        </TabPanel>
+        <TabPanel value={tab} index={11}>
           <Box textAlign="center" mt={5}>
             <Typography variant="h6" gutterBottom>
               Download Project Summary

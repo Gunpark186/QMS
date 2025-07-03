@@ -1,8 +1,8 @@
 // assets
-import { IconDashboard, IconClipboardList, IconLogout } from '@tabler/icons-react';
+import { IconDashboard, IconClipboardList } from '@tabler/icons-react';
 
 // constant
-const icons = { IconDashboard, IconClipboardList, IconLogout };
+const icons = { IconDashboard, IconClipboardList };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -17,7 +17,8 @@ const dashboard = {
       type: 'item',
       url: '/dashboard/default',
       icon: icons.IconDashboard,
-      breadcrumbs: false
+      breadcrumbs: false,
+      sx: { cursor: 'pointer' } // Ensure pointer cursor
     },
     {
       id: 'projects',
@@ -25,14 +26,8 @@ const dashboard = {
       type: 'item',
       url: '/dashboard/projects',
       icon: icons.IconClipboardList,
-      breadcrumbs: false
-    },{
-      id: 'logout',
-      title: 'Logout',
-      type: 'item',
-      url: 'dashboard/logout',
-      icon: icons.IconLogout,
-      breadcrumbs: false
+      breadcrumbs: false,
+      sx: { cursor: 'pointer' } // Ensure pointer cursor
     }
   ]
 };

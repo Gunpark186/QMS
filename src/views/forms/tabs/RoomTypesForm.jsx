@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react';
 import {
-  Grid, TextField, Button, IconButton, MenuItem, Typography, Box, Paper, Tabs, Tab
+  Grid, TextField, Button, IconButton, MenuItem, Typography, Box, Paper
 } from '@mui/material';
 import { AddCircle, RemoveCircle } from '@mui/icons-material';
 
 const roomTypeOptions = [
+  'King',
+  'Queen',
+  'Twin',
+  'Suite',
+  'Single',
+  'Double',
   'Entrance Corridor',
   'Living Room',
   'Powder Room',
@@ -14,150 +20,110 @@ const roomTypeOptions = [
 ];
 
 export default function RoomTypesForm({ projectId, onNext, onComplete, initialValues }) {
-  const [tab, setTab] = useState(0);
-  const [selectedRooms, setSelectedRooms] = useState(initialValues?.selectedRooms || []);
-  const [roomInfo, setRoomInfo] = useState(initialValues?.roomInfo || {});
+  const [roomType, setRoomType] = useState('');
+  const [count, setCount] = useState('');
+  const [rooms, setRooms] = useState(initialValues?.rooms || []);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (initialValues) {
-      setSelectedRooms(initialValues.selectedRooms || []);
-      setRoomInfo(initialValues.roomInfo || {});
+    if (initialValues && initialValues.rooms) {
+      setRooms(initialValues.rooms);
     }
   }, [initialValues]);
 
-  const handleTabChange = (_, newValue) => setTab(newValue);
-
-  const handleAddRoomType = () => {
-    const available = roomTypeOptions.find(rt => !selectedRooms.includes(rt));
-    if (available) setSelectedRooms([...selectedRooms, available]);
-  };
-
-  const handleRemoveRoomType = (index) => {
-    const removed = selectedRooms[index];
-    setSelectedRooms(selectedRooms.filter((_, i) => i !== index));
-    setRoomInfo(prev => {
-      const newInfo = { ...prev };
-      delete newInfo[removed];
-      return newInfo;
-    });
-  };
-
-  const handleRoomTypeChange = (index, value) => {
-    if (selectedRooms.includes(value)) return;
-    const newRooms = [...selectedRooms];
-    const oldRoom = newRooms[index];
-    newRooms[index] = value;
-    setRoomInfo(prev => {
-      const newInfo = { ...prev };
-      if (prev[oldRoom]) {
-        newInfo[value] = prev[oldRoom];
-        delete newInfo[oldRoom];
-      }
-      return newInfo;
-    });
-    setSelectedRooms(newRooms);
-  };
-
-  const handleQuantityChange = (room, value) => {
-    setRoomInfo(prev => ({ ...prev, [room]: value }));
-    setErrors(prev => ({ ...prev, [room]: '' }));
-  };
-
-  const validate = () => {
-    let valid = true;
+  const handleAdd = () => {
+    let hasError = false;
     const newErrors = {};
-    selectedRooms.forEach(room => {
-      if (!roomInfo[room] || isNaN(roomInfo[room]) || Number(roomInfo[room]) <= 0) {
-        newErrors[room] = 'Enter a valid quantity';
-        valid = false;
-      }
-    });
+    if (!roomType) {
+      newErrors.roomType = 'Select a room type';
+      hasError = true;
+    }
+    if (!count || isNaN(count) || Number(count) <= 0) {
+      newErrors.count = 'Enter a valid count';
+      hasError = true;
+    }
+    if (rooms.some(r => r.roomType === roomType)) {
+      newErrors.roomType = 'Room type already added';
+      hasError = true;
+    }
     setErrors(newErrors);
-    return valid;
+    if (hasError) return;
+    setRooms([...rooms, { roomType, count }]);
+    setRoomType('');
+    setCount('');
+  };
+
+  const handleRemove = (idx) => {
+    setRooms(rooms.filter((_, i) => i !== idx));
   };
 
   const handleSubmit = () => {
-    if (tab === 1 && validate()) {
-      alert('Room types saved!');
-      if (onNext) onNext();
+    if (rooms.length === 0) {
+      setErrors({ form: 'Add at least one room type' });
+      return;
     }
+    setErrors({});
+    if (onNext) onNext({ rooms });
+    if (onComplete) onComplete({ rooms });
   };
 
   return (
-    <Paper elevation={2} sx={{ p: 4, maxWidth: 900, mx: 'auto' }}>
+    <Paper elevation={0} sx={{ p: 4, maxWidth: '1000px', mx: 'auto', boxShadow: 'none', border: 'none' }}>
       <Typography variant="h5" mb={3}>Room Types</Typography>
-      <Tabs value={tab} onChange={handleTabChange} sx={{ mb: 3 }}>
-        <Tab label="Number of Room Types" />
-        <Tab label="Room Information" />
-      </Tabs>
-      {tab === 0 && (
-        <>
-          {selectedRooms.map((room, idx) => (
+      <Grid container spacing={2} alignItems="center" mb={2}>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            select
+            label="Room Type"
+            value={roomType}
+            onChange={e => setRoomType(e.target.value)}
+            fullWidth
+            error={Boolean(errors.roomType)}
+            helperText={errors.roomType}
+          >
+            {roomTypeOptions.map((option) => (
+              <MenuItem key={option} value={option}>{option}</MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+        <Grid item xs={8} sm={4}>
+          <TextField
+            label="Count"
+            type="number"
+            value={count}
+            onChange={e => setCount(e.target.value)}
+            fullWidth
+            error={Boolean(errors.count)}
+            helperText={errors.count}
+          />
+        </Grid>
+        <Grid item xs={4} sm={2}>
+          <IconButton color="primary" onClick={handleAdd} sx={{ mt: { xs: 1, sm: 0 } }}>
+            <AddCircle fontSize="large" />
+          </IconButton>
+        </Grid>
+      </Grid>
+      {rooms.length > 0 && (
+        <Box mb={2}>
+          {rooms.map((r, idx) => (
             <Grid container spacing={2} alignItems="center" key={idx} mb={1}>
-              <Grid item xs={10} sm={6} md={5}>
-                <TextField
-                  select
-                  label="Room Type"
-                  value={room}
-                  onChange={e => handleRoomTypeChange(idx, e.target.value)}
-                  fullWidth
-                >
-                  {roomTypeOptions
-                    .filter(rt => rt === room || !selectedRooms.includes(rt))
-                    .map(rt => (
-                      <MenuItem key={rt} value={rt}>{rt}</MenuItem>
-                    ))}
-                </TextField>
+              <Grid item xs={6}>
+                <Typography>{r.roomType}</Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography>{r.count}</Typography>
               </Grid>
               <Grid item xs={2}>
-                {selectedRooms.length > 1 && (
-                  <IconButton color="error" onClick={() => handleRemoveRoomType(idx)}>
-                    <RemoveCircle fontSize="large" />
-                  </IconButton>
-                )}
+                <IconButton color="error" onClick={() => handleRemove(idx)}>
+                  <RemoveCircle fontSize="large" />
+                </IconButton>
               </Grid>
             </Grid>
           ))}
-          <Box mt={2}>
-            {selectedRooms.length < roomTypeOptions.length && (
-              <Button
-                startIcon={<AddCircle />}
-                variant="outlined"
-                onClick={handleAddRoomType}
-              >
-                Add Room Type
-              </Button>
-            )}
-          </Box>
-        </>
+        </Box>
       )}
-      {tab === 1 && (
-        <>
-          {selectedRooms.length === 0 && (
-            <Typography color="text.secondary" mb={2}>
-              Please add at least one room type in the previous tab.
-            </Typography>
-          )}
-          {selectedRooms.map((room, idx) => (
-            <Grid container spacing={2} alignItems="center" key={room} mb={1}>
-              <Grid item xs={6} md={5}>
-                <Typography>{room}</Typography>
-              </Grid>
-              <Grid item xs={6} md={5}>
-                <TextField
-                  label="Quantity"
-                  type="number"
-                  value={roomInfo[room] || ''}
-                  onChange={e => handleQuantityChange(room, e.target.value)}
-                  error={Boolean(errors[room])}
-                  helperText={errors[room]}
-                  fullWidth
-                />
-              </Grid>
-            </Grid>
-          ))}
-        </>
+      {errors.form && (
+        <Typography color="error" mb={2}>{errors.form}</Typography>
       )}
       <Box mt={3} textAlign="right">
         <Button
@@ -165,7 +131,6 @@ export default function RoomTypesForm({ projectId, onNext, onComplete, initialVa
           size="large"
           onClick={handleSubmit}
           sx={{ px: 4, py: 1.5 }}
-          disabled={tab !== 1}
         >
           Save & Next
         </Button>

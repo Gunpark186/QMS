@@ -94,7 +94,6 @@ export default function Projects() {
             <TableRow sx={{ backgroundColor: '#f5f7fa' }}>
               <TableCell><strong>Project Name</strong></TableCell>
               <TableCell><strong>CRM Project No</strong></TableCell>
-              <TableCell><strong>Country</strong></TableCell>
               <TableCell><strong>Created Date</strong></TableCell>
               <TableCell><strong>Created Time</strong></TableCell>
               <TableCell align="center"><strong>Actions</strong></TableCell>
@@ -103,7 +102,7 @@ export default function Projects() {
           <TableBody>
             {projects.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} align="center" sx={{ py: 4 }}>
+                <TableCell colSpan={5} align="center" sx={{ py: 4 }}>
                   <Typography variant="body1" color="textSecondary">
                     No projects available. Click <strong>Create New</strong> to get started.
                   </Typography>
@@ -123,11 +122,10 @@ export default function Projects() {
                     navigate('/projectforms');
                   }}
                 >
-                  <TableCell>{project.name}</TableCell>
-                  <TableCell>{project.crm}</TableCell>
-                  <TableCell>{project.country}</TableCell>
-                  <TableCell>{project.createdDate}</TableCell>
-                  <TableCell>{project.createdTime}</TableCell>
+                  <TableCell sx={{ cursor: 'pointer' }}>{project.name}</TableCell>
+                  <TableCell sx={{ cursor: 'pointer' }}>{project.crm}</TableCell>
+                  <TableCell sx={{ cursor: 'pointer' }}>{project.createdDate}</TableCell>
+                  <TableCell sx={{ cursor: 'pointer' }}>{project.createdTime}</TableCell>
                   <TableCell align="center" onClick={e => e.stopPropagation()}>
                     <Tooltip title="Edit">
                       <IconButton color="primary" onClick={() => handleEdit(project)}>

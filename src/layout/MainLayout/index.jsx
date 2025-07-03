@@ -56,7 +56,7 @@ export default function MainLayout() {
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
       {/* main content */}
-      <MainContentStyled {...{ borderRadius, open: drawerOpen }} sx={{ ml: collapsed ? '72px' : '220px', transition: 'margin-left 0.2s' }}>
+      <MainContentStyled {...{ borderRadius, open: drawerOpen }} sx={{ ml: collapsed ? '72px' : '150px', transition: 'margin-left 0.2s' }}>
         <Box sx={{ ...{ px: { xs: 0 } }, minHeight: 'calc(100vh - 128px)', display: 'flex', flexDirection: 'column' }}>
           {/* breadcrumb */}
           <Breadcrumbs />
