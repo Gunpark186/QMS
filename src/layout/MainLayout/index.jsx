@@ -57,7 +57,7 @@ export default function MainLayout() {
 
       {/* main content */}
       <MainContentStyled {...{ borderRadius, open: drawerOpen }} sx={{ ml: collapsed ? '72px' : '150px', transition: 'margin-left 0.2s' }}>
-        <Box sx={{ ...{ px: { xs: 0 } }, minHeight: 'calc(100vh - 128px)', display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{ ...{ px: { xs: 0 } }, minHeight: 'calc(100vh - 96px)', pt: 2, display: 'flex', flexDirection: 'column' }}>
           {/* breadcrumb */}
           <Breadcrumbs />
           <Outlet />
