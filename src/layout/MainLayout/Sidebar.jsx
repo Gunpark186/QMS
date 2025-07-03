@@ -41,8 +41,12 @@ export default function Sidebar({ collapsed, setCollapsed }) {
               button
               selected={location.pathname === item.url}
               onClick={() => {
-                if (collapsed) setCollapsed(false);
-                else navigate(item.url);
+                if (collapsed) {
+                  setCollapsed(false);
+                  setTimeout(() => navigate(item.url), 200); // Expand, then route after animation
+                } else {
+                  navigate(item.url);
+                }
               }}
               sx={{
                 justifyContent: collapsed ? 'center' : 'flex-start',

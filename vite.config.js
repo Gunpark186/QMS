@@ -35,7 +35,7 @@ export default defineConfig(({ mode }) => {
       }
     },
     
-    base:  '/free/pages/login' ,
+    base:  '/pages/login' ,
     plugins: [react(), jsconfigPaths()]
   };
 });
